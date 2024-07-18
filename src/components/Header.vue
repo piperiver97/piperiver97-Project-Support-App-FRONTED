@@ -8,21 +8,19 @@ import { RouterLink } from "vue-router";
     <div class="container-fluid justify-content-center">
       <ul class="navbar-nav">
         <div class="nav-item">
-          <RouterLink to="/" class="nav-link" aria-current="page"
-            >Home</RouterLink
-          >
+          <RouterLink to="/" class="nav-link" aria-current="page">Home</RouterLink>
         </div>
         <div class="nav-item">
           <RouterLink to="/request" class="nav-link">Request</RouterLink>
-      </div>
+        </div>
         <div class="nav-item">
           <RouterLink to="/requestedit" class="nav-link">Requestedit</RouterLink>
         </div>
         <div class="nav-item">
-          <RouterLink to="/requestlist" class="nav-link">requestlist</RouterLink>
+          <RouterLink to="/requestlist" class="nav-link">Requestlist</RouterLink>
         </div>
         <div class="nav-item">
-          <RouterLink to="/supportform" class="nav-link">supportform</RouterLink>
+          <RouterLink to="/supportform" class="nav-link">Supportform</RouterLink>
         </div>
       </ul>
     </div>
@@ -33,8 +31,7 @@ import { RouterLink } from "vue-router";
 .navbar {
   background-color: #373a40 !important;
   border: 2px solid rgba(0, 0, 0, 0.8);
-  max-height: 60px;
-  
+  max-height: 80px;
 
   .nav-link {
     color: white;
@@ -43,14 +40,17 @@ import { RouterLink } from "vue-router";
       1px -1px 0 #000, 1px 0 0 #000, -1px 0 0 #000, 0 1px 0 #000, 0 -1px 0 #000;
     font-size: 20px;
     font-weight: bold;
-    display: flex;
-    position: s;
-    
+  }
+  
+  .nav-item {
+    margin: 0 35px; 
   }
 }
+
 @media only screen and (max-width: 450px) {
   .nav-item {
     padding: 0 6px !important;
+    margin: 0 5px; 
   }
 
   .nav-link {

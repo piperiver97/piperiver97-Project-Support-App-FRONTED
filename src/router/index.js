@@ -13,7 +13,7 @@ const router = createRouter({
       path: '/request',
       name: 'request',
     
-      component: () => import('../views/RequestEditView.vue')
+      component: () => import('../views/RequestView.vue')
     },
     {
       path: '/requestedit',

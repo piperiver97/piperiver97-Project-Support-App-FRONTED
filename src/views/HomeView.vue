@@ -1,8 +1,12 @@
-<script setup>
-</script>
-
 <template>
   <main>
-    <TheWelcome />
+    <Login />
   </main>
 </template>
+
+<script setup>
+import Login from '../components/Login.vue'; 
+</script>
+
+<style scoped>
+</style>
