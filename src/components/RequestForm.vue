@@ -1,7 +1,7 @@
 <template>
-  <div class="edit-request">
-    <h1>Editar Solicitud</h1>
-    <form @submit.prevent="updateRequest">
+  <div class="create-request">
+    <h1>Crear Solicitud</h1>
+    <form @submit.prevent="submitRequest">
       <label for="name">Nombre del solicitante:</label>
       <input type="text" v-model="name" id="name" required />
 
@@ -14,8 +14,11 @@
       <label for="description">Descripción de la consulta:</label>
       <textarea v-model="description" id="description" required></textarea>
 
-      <button type="button" @click="cancel">Cancelar</button>
-      <button type="submit">Guardar cambios</button>
+      <div class="button-group">
+        <button type="button" @click="resetForm">Resetear</button>
+        <button type="button" @click="cancel">Cancelar</button>
+        <button type="submit">Validar</button>
+      </div>
     </form>
   </div>
 </template>
@@ -24,21 +27,22 @@
 export default {
   data() {
     return {
-      id: this.$route.params.id,
       name: '',
       date: '',
       subject: '',
       description: ''
     };
   },
-  created() {
-    // Obtener la solicitud existente desde la base de datos usando el id
-    // Ejemplo: this.loadRequest(this.id);
-  },
   methods: {
-    updateRequest() {
-      // Implementar lógica para guardar los cambios en la solicitud
+    submitRequest() {
+      // Implementar lógica para guardar la nueva solicitud
       this.$router.push('/list');
+    },
+    resetForm() {
+      this.name = '';
+      this.date = '';
+      this.subject = '';
+      this.description = '';
     },
     cancel() {
       this.$router.push('/list');
@@ -48,66 +52,80 @@ export default {
 </script>
 
 <style scoped>
-/* Estilos para el formulario de edición de solicitud */
-.edit-request {
+/* Estilos para el formulario de solicitud */
+.create-request {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: #f9f9f9;
+  background-color: #f7f7f7;
   padding: 20px;
 }
 
 h1 {
   margin-bottom: 20px;
-  color: #333;
-  font-size: 2rem;
-  font-family: 'Arial', sans-serif;
+  color: #444;
+  font-size: 1.8rem;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 form {
   background: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 600px;
+  max-width: 500px;
 }
 
 label {
   display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
-  color: #555;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #666;
 }
 
 input[type="text"],
 input[type="date"],
 textarea {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 16px;
+  padding: 12px;
+  margin-bottom: 14px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 1rem;
   box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+textarea:focus {
+  border-color: #007bff;
+  outline: none;
 }
 
 textarea {
   resize: vertical;
-  min-height: 100px;
+  min-height: 120px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
 }
 
 button {
   background-color: #007bff;
   color: #ffffff;
   border: none;
-  padding: 10px 15px;
-  border-radius: 4px;
+  padding: 12px 18px;
+  border-radius: 6px;
   font-size: 1rem;
   cursor: pointer;
-  margin-right: 10px;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
 }
 
 button:hover {

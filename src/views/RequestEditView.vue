@@ -1,7 +1,12 @@
-<template>
- 
-</template>
+<script setup>
+import RequestEdit from '../components/RequestEdit.vue'; 
+</script>
 
-<style>
-
+<style scoped>
 </style>
+
+<template>
+  <main>
+    <RequestEdit/>
+      </main>
+</template>

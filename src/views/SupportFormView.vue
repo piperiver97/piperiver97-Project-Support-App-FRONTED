@@ -1,7 +1,20 @@
+<script>
+import RequestForm from '../components/RequestForm.vue';
+
+export default {
+  components: {
+    RequestForm
+  }
+};
+</script>
 <template>
- 
-</template>
+    <div class="request-form-view">
+      <RequestForm />
+    </div>
+  </template>
+  
 
-<style>
-
-</style>
+  
+  <style scoped>
+  </style>
+  

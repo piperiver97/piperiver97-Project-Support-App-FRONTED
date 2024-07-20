@@ -8,20 +8,20 @@ import { RouterLink } from "vue-router";
     <div class="container-fluid justify-content-center">
       <ul class="navbar-nav">
         <div class="nav-item">
-          <RouterLink to="/" class="nav-link" aria-current="page">Home</RouterLink>
+          <RouterLink to="/" class="nav-link" aria-current="page">Inicio</RouterLink>
         </div>
         <div class="nav-item">
-          <RouterLink to="/request" class="nav-link">Request</RouterLink>
+          <RouterLink to="/requestlist" class="nav-link">Lista</RouterLink>
         </div>
         <div class="nav-item">
-          <RouterLink to="/requestedit" class="nav-link">Requestedit</RouterLink>
+          <RouterLink to="/supportform" class="nav-link">Formulario de soporte</RouterLink>
         </div>
+       
         <div class="nav-item">
-          <RouterLink to="/requestlist" class="nav-link">Requestlist</RouterLink>
+          <RouterLink to="/requestedit" class="nav-link">Editar Solicitud</RouterLink>
         </div>
-        <div class="nav-item">
-          <RouterLink to="/supportform" class="nav-link">Supportform</RouterLink>
-        </div>
+        
+        
       </ul>
     </div>
   </nav>
