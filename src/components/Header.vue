@@ -14,7 +14,7 @@ const toggleMenu = () => {
   <nav class="navbar">
     <div class="navbar-container">
       <div class="navbar-brand">
-        <img src="/public/Icon/_68483375-2be2-4211-bd1f-ccb7aa70aeba-ai-brush-removebg-yjo7pd1m.png" alt="Logo" class="navbar-logo" />
+        <img src="/public/Icon/_68483375-2be2-4211-bd1f-ccb7aa70aeba-ai-brush-removebg-yjo7pd1m.png" alt="Logo" class="navbar-logo"/>
         <RouterLink to="/" class="navbar-name">SupportApp</RouterLink>
       </div>
       <div class="navbar-links" :class="{ 'active': isMenuOpen }">
@@ -60,8 +60,8 @@ const toggleMenu = () => {
 }
 
 .navbar-logo {
-  width: 40px;
-  height: 40px;
+  width: 40px; 
+  height: 40px; 
   border-radius: 50%;
   border: 2px solid #00ffff;
   box-shadow: 0 0 10px #00ffff;

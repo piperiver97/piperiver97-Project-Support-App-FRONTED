@@ -1,3 +1,38 @@
+<script>
+export default {
+  data() {
+    return {
+      name: '',
+      date: '',
+      subject: '',
+      description: ''
+    };
+  },
+  methods: {
+    submitRequest() {
+      const newRequest = {
+        id: Date.now(),
+        name: this.name,
+        date: this.date,
+        subject: this.subject,
+        description: this.description
+      };
+      this.$emit('request-created', newRequest);
+      this.resetForm();
+      this.$router.push('/requestlist');
+    },
+    resetForm() {
+      this.name = '';
+      this.date = '';
+      this.subject = '';
+      this.description = '';
+    },
+    cancel() {
+      this.$router.push('/requestlist');
+    }
+  }
+};
+</script>
 <template>
   <div class="create-request">
     <h1>Crear Solicitud</h1>
@@ -25,58 +60,14 @@
       <div class="button-group">
         <button type="button" @click="resetForm" class="reset-btn">Resetear</button>
         <button type="button" @click="cancel" class="cancel-btn">Cancelar</button>
-        <button type="submit" class="save-btn">Guardar</button>
+        <button type="submit" class="save-btn">Validar</button>
       </div>
     </form>
   </div>
 </template>
 
-<script>
-import requestStore from '../stores/RequestStore'; 
-
-export default {
-  data() {
-    return {
-      name: '',
-      date: '',
-      subject: '',
-      description: ''
-    };
-  },
-  methods: {
-    submitRequest() {
-      const newRequest = {
-        id: Date.now(),
-        name: this.name,
-        date: this.date,
-        subject: this.subject,
-        description: this.description,
-        created_at: new Date().toISOString()
-      };
-
-      requestStore.saveRequest(newRequest);
-
-      this.$router.push('/list');
-    },
-    resetForm() {
-      this.name = '';
-      this.date = '';
-      this.subject = '';
-      this.description = '';
-    },
-    cancel() {
-      this.$router.push('/list');
-    }
-  }
-};
-</script>
-
-<style scoped>
-</style>
 
 
-<style scoped>
-</style>
 
 <style scoped>
 .create-request {
