@@ -25,7 +25,8 @@ const routes = [
     name: 'supportform',
     component: () => import('../views/SupportFormView.vue'),
     meta: { requiresAuth: true }
-  }
+  },
+  
 ];
 
 const router = createRouter({

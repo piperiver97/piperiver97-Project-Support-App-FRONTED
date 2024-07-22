@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import requestStore from '../stores/RequestStore'; 
+
 export default {
   data() {
     return {
@@ -52,16 +54,8 @@ export default {
         created_at: new Date().toISOString()
       };
 
-      // Obtener solicitudes existentes del almacenamiento local
-      const requests = JSON.parse(localStorage.getItem('requests')) || [];
+      requestStore.saveRequest(newRequest);
 
-      // Añadir la nueva solicitud
-      requests.push(newRequest);
-
-      // Guardar de nuevo en el almacenamiento local
-      localStorage.setItem('requests', JSON.stringify(requests));
-
-      // Redirigir a la lista de solicitudes
       this.$router.push('/list');
     },
     resetForm() {
@@ -78,7 +72,10 @@ export default {
 </script>
 
 <style scoped>
-/* Tus estilos aquí */
+</style>
+
+
+<style scoped>
 </style>
 
 <style scoped>

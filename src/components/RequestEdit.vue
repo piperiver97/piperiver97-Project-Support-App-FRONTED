@@ -10,11 +10,9 @@ export default {
     };
   },
   created() {
-    // Aquí puedes cargar los datos de la solicitud si es necesario
   },
   methods: {
     updateRequest() {
-      // Aquí iría la lógica para actualizar la solicitud
       this.$router.push('/list');
     },
     cancel() {
