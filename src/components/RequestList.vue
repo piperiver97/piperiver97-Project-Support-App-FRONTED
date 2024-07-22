@@ -1,16 +1,3 @@
-<script>
-export default {
-  data() {
-    return {
-      requests: []
-    };
-  },
-  created() {
-    // Obtener la lista de solicitudes desde la base de datos
-    // Ejemplo: this.requests = fetchRequestsFromDatabase();
-  }
-};
-</script>
 <template>
   <div class="request-list">
     <h1>Lista de Solicitudes</h1>
@@ -22,8 +9,30 @@ export default {
   </div>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      requests: []
+    };
+  },
+  created() {
+    this.loadRequests();
+  },
+  methods: {
+    loadRequests() {
+      // Obtener solicitudes del almacenamiento local
+      const requests = JSON.parse(localStorage.getItem('requests')) || [];
 
+      // Ordenar las solicitudes por fecha de creación
+      requests.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+      this.requests = requests;
+    }
+  }
+};
+</script>
 
 <style scoped>
-/* Estilos para la lista de solicitudes */
+/* Tus estilos aquí */
 </style>
