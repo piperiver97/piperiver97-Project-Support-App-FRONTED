@@ -1,73 +1,80 @@
-<script>
-export default {
-  data() {
-    return {
-      name: '',
-      date: '',
-      subject: '',
-      description: ''
-    };
-  },
-  methods: {
-    submitRequest() {
-      const newRequest = {
-        id: Date.now(),
-        name: this.name,
-        date: this.date,
-        subject: this.subject,
-        description: this.description
-      };
-      this.$emit('request-created', newRequest);
-      this.resetForm();
-      this.$router.push('/requestlist');
-    },
-    resetForm() {
-      this.name = '';
-      this.date = '';
-      this.subject = '';
-      this.description = '';
-    },
-    cancel() {
-      this.$router.push('/requestlist');
+<script setup>
+import { ref } from 'vue';
+import { useRequestStore } from '../stores/RequestStore';
+
+const newRequest = ref({
+  rname: '',
+  subject: '',
+  description: '',
+  date: '',
+});
+
+const requestStore = useRequestStore();
+
+const handleSubmit = async () => {
+  try {
+    
+    if (newRequest.value.date) {
+      const date = new Date(newRequest.value.date);
+      newRequest.value.date = date.toISOString(); 
     }
+    await requestStore.addRequest(newRequest.value);
+    resetForm();
+  } catch (error) {
+    console.error('Error submitting the request:', error);
   }
 };
+
+const resetForm = () => {
+  newRequest.value.rname = '';
+  newRequest.value.subject = '';
+  newRequest.value.description = '';
+  newRequest.value.date = '';
+};
+
+const cancel = () => {
+  resetForm();
+};
 </script>
+
+
 <template>
   <div class="create-request">
     <h1>Crear Solicitud</h1>
-    <form @submit.prevent="submitRequest">
+    <form @submit.prevent="handleSubmit">
       <div class="input-group">
-        <label for="name">Nombre del solicitante:</label>
-        <input type="text" v-model="name" id="name" required />
+        <label for="rname">Nombre del solicitante:</label>
+        <input type="text" v-model="newRequest.rname" id="rname" required />
       </div>
-
-      <div class="input-group">
-        <label for="date">Fecha de la solicitud:</label>
-        <input type="date" v-model="date" id="date" required />
-      </div>
+      <div class="mb-3">
+            <label for="date" class="form-label">Date</label>
+            <input
+              v-model="newRequest.requestDate"
+              type="datetime-local"
+              class="form-control"
+              id="date"
+              required
+            />
+          </div>
 
       <div class="input-group">
         <label for="subject">Tema de la consulta:</label>
-        <input type="text" v-model="subject" id="subject" required />
+        <input type="text" v-model="newRequest.subject" id="subject" required />
       </div>
 
       <div class="input-group">
         <label for="description">Descripción de la consulta:</label>
-        <textarea v-model="description" id="description" required></textarea>
+        <textarea v-model="newRequest.description" id="description" required></textarea>
       </div>
 
       <div class="button-group">
         <button type="button" @click="resetForm" class="reset-btn">Resetear</button>
         <button type="button" @click="cancel" class="cancel-btn">Cancelar</button>
-        <button type="submit" class="save-btn">Validar</button>
+        <button type="submit" class="save-btn">Guardar</button>
       </div>
     </form>
   </div>
 </template>
-
-
-
 
 <style scoped>
 .create-request {
@@ -76,32 +83,45 @@ export default {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: #0a0a0a;
+  background: linear-gradient(135deg, #0a0a23, #1a1a3a);
   padding: 20px;
+  color: #00ffff;
 }
 
 form {
-  background: #1a1a1a;
+  background: rgba(26, 26, 58, 0.8);
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
   width: 100%;
   max-width: 600px;
+  border: 1px solid #00ffff;
 }
 
 h1 {
   margin-bottom: 30px;
   color: #00ffff;
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-family: 'Arial', sans-serif;
   text-align: center;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  text-shadow: 0 0 10px #00ffff;
+  letter-spacing: 3px;
+  text-shadow: 0 0 15px #00ffff;
+  animation: glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff;
+  }
+  to {
+    text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
+  }
 }
 
 .input-group {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  position: relative;
 }
 
 label {
@@ -109,38 +129,45 @@ label {
   margin-bottom: 8px;
   font-weight: bold;
   color: #00ffff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 input[type="text"],
-input[type="date"],
+input[type="datetime-local"],
 textarea {
   width: 100%;
   padding: 12px;
   border: 1px solid #00ffff;
   border-radius: 5px;
   font-size: 1rem;
-  background-color: #0a0a0a;
+  background-color: rgba(10, 10, 35, 0.6);
   color: #ffffff;
   box-sizing: border-box;
   transition: all 0.3s ease;
 }
 
 input[type="text"]:focus,
-input[type="date"]:focus,
+input[type="datetime-local"]:focus,
 textarea:focus {
   outline: none;
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+  background-color: rgba(10, 10, 35, 0.8);
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) hue-rotate(180deg);
 }
 
 textarea {
   resize: vertical;
-  min-height: 100px;
+  min-height: 120px;
 }
 
 .button-group {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 button {
@@ -154,18 +181,36 @@ button {
   transition: all 0.3s ease;
   flex: 1;
   margin: 0 5px;
+  position: relative;
+  overflow: hidden;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: rotate(45deg);
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+button:hover::before {
+  left: 100%;
 }
 
 .save-btn {
-  background-color: #00ffff;
-  color: #0a0a0a;
+  background: linear-gradient(45deg, #00ffff, #00cccc);
+  color: #0a0a23;
   border: none;
 }
 
 .save-btn:hover {
-  background-color: #0a0a0a;
-  color: #00ffff;
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+  background: linear-gradient(45deg, #00cccc, #00ffff);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
 }
 
 .cancel-btn,
@@ -178,7 +223,7 @@ button {
 .cancel-btn:hover,
 .reset-btn:hover {
   background-color: rgba(0, 255, 255, 0.1);
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
 }
 
 @media (max-width: 768px) {
@@ -187,11 +232,11 @@ button {
   }
 
   h1 {
-    font-size: 1.5rem;
+    font-size: 2rem;
   }
 
   input[type="text"],
-  input[type="date"],
+  input[type="datetime-local"],
   textarea {
     font-size: 0.9rem;
   }
@@ -211,11 +256,11 @@ button {
   }
 
   h1 {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
   }
 
   input[type="text"],
-  input[type="date"],
+  input[type="datetime-local"],
   textarea {
     font-size: 0.8rem;
     padding: 8px;

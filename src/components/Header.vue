@@ -15,7 +15,7 @@ const toggleMenu = () => {
     <div class="navbar-container">
       <div class="navbar-brand">
         <img src="/public/Icon/_68483375-2be2-4211-bd1f-ccb7aa70aeba-ai-brush-removebg-yjo7pd1m.png" alt="Logo" class="navbar-logo"/>
-        <RouterLink to="/" class="navbar-name">SupportApp</RouterLink>
+        <RouterLink to="/" class="navbar-name">SupportApp GAME</RouterLink>
       </div>
       <div class="navbar-links" :class="{ 'active': isMenuOpen }">
         <RouterLink to="/" class="navbar-item">Inicio</RouterLink>
@@ -35,13 +35,14 @@ const toggleMenu = () => {
 
 <style scoped>
 .navbar {
-  background-color: #0a0a0a;
+  background: linear-gradient(90deg, #0a0a23, #1a1a3a);
   border-bottom: 2px solid #00ffff;
   position: fixed;
   width: 100%;
   top: 0;
   left: 0;
   z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 255, 255, 0.3);
 }
 
 .navbar-container {
@@ -64,7 +65,14 @@ const toggleMenu = () => {
   height: 40px; 
   border-radius: 50%;
   border: 2px solid #00ffff;
-  box-shadow: 0 0 10px #00ffff;
+  box-shadow: 0 0 15px #00ffff;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(0, 255, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0); }
 }
 
 .navbar-name {
@@ -91,11 +99,29 @@ const toggleMenu = () => {
   border-radius: 5px;
   text-transform: uppercase;
   letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+.navbar-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+  transition: 0.5s;
+}
+
+.navbar-item:hover::before {
+  left: 100%;
 }
 
 .navbar-item:hover {
   background-color: rgba(0, 255, 255, 0.1);
   box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+  color: #00ffff;
 }
 
 .logout-btn {
@@ -108,7 +134,7 @@ const toggleMenu = () => {
 
 .logout-btn:hover {
   background-color: #00ffff;
-  color: #0a0a0a;
+  color: #0a0a23;
 }
 
 .menu-icon {
@@ -122,6 +148,7 @@ const toggleMenu = () => {
   background-color: #00ffff;
   margin: 5px 0;
   transition: 0.4s;
+  box-shadow: 0 0 5px #00ffff;
 }
 
 @media (max-width: 768px) {
@@ -132,7 +159,7 @@ const toggleMenu = () => {
     top: 100%;
     left: 0;
     width: 100%;
-    background-color: #0a0a0a;
+    background: linear-gradient(180deg, #0a0a23, #1a1a3a);
     padding: 1rem 0;
     border-top: 2px solid #00ffff;
   }

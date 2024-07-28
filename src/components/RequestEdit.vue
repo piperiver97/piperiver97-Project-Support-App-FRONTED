@@ -10,6 +10,7 @@ export default {
     };
   },
   created() {
+    // Fetch existing request data if necessary
   },
   methods: {
     updateRequest() {
@@ -21,8 +22,9 @@ export default {
   }
 };
 </script>
+
 <template>
-  <div class="edit-request">
+  <div class="edit-request create-request">
     <form @submit.prevent="updateRequest">
       <h1>Editar Solicitud</h1>
       
@@ -33,7 +35,7 @@ export default {
 
       <div class="input-group">
         <label for="date">Fecha de la solicitud:</label>
-        <input type="date" v-model="date" id="date" required />
+        <input type="datetime-local" v-model="date" id="date" required />
       </div>
 
       <div class="input-group">
@@ -54,41 +56,53 @@ export default {
   </div>
 </template>
 
-
-
 <style scoped>
+.create-request,
 .edit-request {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: #0a0a0a;
+  background: linear-gradient(135deg, #0a0a23, #1a1a3a);
   padding: 20px;
+  color: #00ffff;
 }
 
 form {
-  background: #1a1a1a;
+  background: rgba(26, 26, 58, 0.8);
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
   width: 100%;
   max-width: 600px;
+  border: 1px solid #00ffff;
 }
 
 h1 {
   margin-bottom: 30px;
   color: #00ffff;
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-family: 'Arial', sans-serif;
   text-align: center;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  text-shadow: 0 0 10px #00ffff;
+  letter-spacing: 3px;
+  text-shadow: 0 0 15px #00ffff;
+  animation: glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff;
+  }
+  to {
+    text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
+  }
 }
 
 .input-group {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  position: relative;
 }
 
 label {
@@ -96,38 +110,45 @@ label {
   margin-bottom: 8px;
   font-weight: bold;
   color: #00ffff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 input[type="text"],
-input[type="date"],
+input[type="datetime-local"],
 textarea {
   width: 100%;
   padding: 12px;
   border: 1px solid #00ffff;
   border-radius: 5px;
   font-size: 1rem;
-  background-color: #0a0a0a;
+  background-color: rgba(10, 10, 35, 0.6);
   color: #ffffff;
   box-sizing: border-box;
   transition: all 0.3s ease;
 }
 
 input[type="text"]:focus,
-input[type="date"]:focus,
+input[type="datetime-local"]:focus,
 textarea:focus {
   outline: none;
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+  background-color: rgba(10, 10, 35, 0.8);
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) hue-rotate(180deg);
 }
 
 textarea {
   resize: vertical;
-  min-height: 100px;
+  min-height: 120px;
 }
 
 .button-group {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 button {
@@ -140,29 +161,95 @@ button {
   font-weight: bold;
   transition: all 0.3s ease;
   flex: 1;
-  margin: 0 10px;
+  margin: 0 5px;
+  position: relative;
+  overflow: hidden;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: rotate(45deg);
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+button:hover::before {
+  left: 100%;
 }
 
 .save-btn {
-  background-color: #00ffff;
-  color: #0a0a0a;
+  background: linear-gradient(45deg, #00ffff, #00cccc);
+  color: #0a0a23;
   border: none;
 }
 
 .save-btn:hover {
-  background-color: #0a0a0a;
-  color: #00ffff;
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+  background: linear-gradient(45deg, #00cccc, #00ffff);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
 }
 
-.cancel-btn {
+.cancel-btn,
+.reset-btn {
   background-color: transparent;
   color: #00ffff;
   border: 1px solid #00ffff;
 }
 
-.cancel-btn:hover {
+.cancel-btn:hover,
+.reset-btn:hover {
   background-color: rgba(0, 255, 255, 0.1);
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+  form {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  input[type="text"],
+  input[type="datetime-local"],
+  textarea {
+    font-size: 0.9rem;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  button {
+    margin: 5px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  form {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  input[type="text"],
+  input[type="datetime-local"],
+  textarea {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+
+  button {
+    font-size: 0.9rem;
+    padding: 10px 15px;
+  }
 }
 </style>
