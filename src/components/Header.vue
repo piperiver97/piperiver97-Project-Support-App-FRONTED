@@ -21,8 +21,7 @@ const toggleMenu = () => {
         <RouterLink to="/" class="navbar-item">Inicio</RouterLink>
         <RouterLink to="/requestlist" class="navbar-item">Lista</RouterLink>
         <RouterLink to="/supportform" class="navbar-item">Soporte</RouterLink>
-        <RouterLink to="/requestedit" class="navbar-item">Editar</RouterLink>
-        <button v-if="auth.isAuthenticated" @click="auth.logout()" class="navbar-item logout-btn">Cerrar Sesión</button>
+        <RouterLink to="/requestedit/:id" class="navbar-item">Editar</RouterLink>
       </div>
       <div class="menu-icon" @click="toggleMenu">
         <div class="bar"></div>

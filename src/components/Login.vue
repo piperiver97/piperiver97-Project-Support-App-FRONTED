@@ -27,7 +27,6 @@ export default {
       <h1>SupportApp GAME</h1>
       <p>Bienvenido a tu centro de soporte para videojuegos 3D</p>
       <div class="game-visual">
-        <!-- Aquí puedes agregar una imagen o animación relacionada con videojuegos 3D -->
         <div class="cube"></div>
       </div>
     </div>

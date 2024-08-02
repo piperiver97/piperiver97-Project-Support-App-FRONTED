@@ -2,60 +2,58 @@
 import { ref } from 'vue';
 import { useRequestStore } from '../stores/RequestStore';
 
-const newRequest = ref({
-  rname: '',
-  subject: '',
-  description: '',
-  date: '',
-});
+const emit = defineEmits(['cancel', 'saved']);
 
 const requestStore = useRequestStore();
 
+const newRequest = ref({
+  requestName: '',
+  subject: '',
+  description: '',
+  requestDate: '',
+});
+
+const resetForm = () => {
+  newRequest.value = {
+    requestName: '',
+    subject: '',
+    description: '',
+    requestDate: '',
+  };
+};
+
 const handleSubmit = async () => {
   try {
-    
-    if (newRequest.value.date) {
-      const date = new Date(newRequest.value.date);
-      newRequest.value.date = date.toISOString(); 
+    // Validar que la fecha esté en formato correcto si es necesario
+    if (newRequest.value.requestDate) {
+      const date = new Date(newRequest.value.requestDate);
+      newRequest.value.requestDate = date.toISOString().split('.')[0];
     }
+    // Agregar la solicitud a través del store
     await requestStore.addRequest(newRequest.value);
+    // Limpiar el formulario
     resetForm();
+    // Emitir el evento 'saved'
+    emit('saved');
   } catch (error) {
     console.error('Error submitting the request:', error);
   }
 };
-
-const resetForm = () => {
-  newRequest.value.rname = '';
-  newRequest.value.subject = '';
-  newRequest.value.description = '';
-  newRequest.value.date = '';
-};
-
-const cancel = () => {
-  resetForm();
-};
 </script>
-
 
 <template>
   <div class="create-request">
-    <h1>Crear Solicitud</h1>
+    <h1>Crear Nueva Solicitud</h1>
     <form @submit.prevent="handleSubmit">
       <div class="input-group">
-        <label for="rname">Nombre del solicitante:</label>
-        <input type="text" v-model="newRequest.rname" id="rname" required />
+        <label for="requestName">Nombre del solicitante:</label>
+        <input type="text" v-model="newRequest.requestName" id="requestName" required />
       </div>
-      <div class="mb-3">
-            <label for="date" class="form-label">Date</label>
-            <input
-              v-model="newRequest.requestDate"
-              type="datetime-local"
-              class="form-control"
-              id="date"
-              required
-            />
-          </div>
+
+      <div class="input-group">
+        <label for="requestDate">Fecha:</label>
+        <input type="datetime-local" v-model="newRequest.requestDate" id="requestDate" required />
+      </div>
 
       <div class="input-group">
         <label for="subject">Tema de la consulta:</label>
@@ -69,7 +67,7 @@ const cancel = () => {
 
       <div class="button-group">
         <button type="button" @click="resetForm" class="reset-btn">Resetear</button>
-        <button type="button" @click="cancel" class="cancel-btn">Cancelar</button>
+        <button type="button" @click="() => emit('cancel')" class="cancel-btn">Cancelar</button>
         <button type="submit" class="save-btn">Guardar</button>
       </div>
     </form>
@@ -77,6 +75,7 @@ const cancel = () => {
 </template>
 
 <style scoped>
+
 .create-request {
   display: flex;
   flex-direction: column;

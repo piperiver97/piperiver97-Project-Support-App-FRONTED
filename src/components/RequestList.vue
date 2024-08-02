@@ -1,20 +1,33 @@
 <script setup>
 import { useRequestStore } from '../stores/RequestStore';
 import { useRouter } from 'vue-router';
+import { ref, onMounted, computed } from 'vue';
 
 const requestStore = useRequestStore();
 const router = useRouter();
+const requests = ref([]);
+
+onMounted(async () => {
+  try {
+    await requestStore.fetchAllRequests();
+    requests.value = requestStore.requests;
+  } catch (error) {
+    console.error('Error fetching requests:', error);
+  }
+});
 
 const formatDate = (dateString) => {
-  return new Date(dateString).toLocaleDateString();
+  if (!dateString) return 'Fecha no disponible';
+  const date = new Date(dateString);
+  return isNaN(date.getTime()) ? 'Fecha inválida' : date.toLocaleDateString();
 };
 
 const truncateDescription = (description) => {
-  return description.length > 50 ? description.substring(0, 47) + '...' : description;
+  return description && description.length > 50 ? description.substring(0, 47) + '...' : description || 'Sin descripción';
 };
 
 const editRequest = (id) => {
-  router.push(`/edit/${id}`);
+  router.push(`/requestedit/${id}`);
 };
 
 const deleteRequest = async (id) => {
@@ -22,6 +35,7 @@ const deleteRequest = async (id) => {
   if (confirmed) {
     try {
       await requestStore.deleteRequest(id);
+      requests.value = requests.value.filter(request => request.id !== id);
     } catch (error) {
       console.error('Error eliminando la solicitud:', error);
     }
@@ -31,6 +45,10 @@ const deleteRequest = async (id) => {
 const createNewRequest = () => {
   router.push('/supportform');
 };
+
+const sortedRequests = computed(() => {
+  return [...requests.value].sort((a, b) => new Date(b.date) - new Date(a.date));
+});
 </script>
 
 <template>
@@ -48,16 +66,16 @@ const createNewRequest = () => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="request in requestStore.requests" :key="request.id">
-            <td>{{ request.rname }}</td>
+          <tr v-for="request in sortedRequests" :key="request.id">
+            <td>{{ request.name || 'Nombre no disponible' }}</td>
             <td>{{ formatDate(request.date) }}</td>
-            <td>{{ request.subject }}</td>
+            <td>{{ request.subject || 'Sin tema' }}</td>
             <td>{{ truncateDescription(request.description) }}</td>
             <td>
-              <button @click="editRequest(request.id)" class="request-list__button">
+              <button @click="editRequest(request.id)" class="request-list__button" aria-label="Editar solicitud">
                 Editar
               </button>
-              <button @click="deleteRequest(request.id)" class="request-list__button request-list__button--delete">
+              <button @click="deleteRequest(request.id)" class="request-list__button request-list__button--delete" aria-label="Eliminar solicitud">
                 Eliminar
               </button>
             </td>

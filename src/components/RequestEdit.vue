@@ -1,33 +1,71 @@
-<script>
-export default {
-  data() {
-    return {
-      id: this.$route.params.id,
-      name: '',
-      date: '',
-      subject: '',
-      description: ''
-    };
-  },
-  created() {
-    // Fetch existing request data if necessary
-  },
-  methods: {
-    updateRequest() {
-      this.$router.push('/list');
-    },
-    cancel() {
-      this.$router.push('/list');
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { useRequestStore } from '../stores/RequestStore';
+import { useRouter, useRoute } from 'vue-router';
+
+const router = useRouter();
+const route = useRoute();
+const requestStore = useRequestStore();
+
+const id = ref(route.params.id || '');
+const name = ref('');
+const date = ref('');
+const subject = ref('');
+const description = ref('');
+const error = ref(null);
+
+const fetchRequest = async () => {
+  if (!id.value) return;
+  try {
+    const request = await requestStore.fetchRequestById(id.value);
+    if (request) {
+      name.value = request.rname || '';
+      date.value = new Date(request.date).toISOString().slice(0, 10) || '';
+      subject.value = request.subject || '';
+      description.value = request.description || '';
+      error.value = null;
+    } else {
+      error.value = "Solicitud no encontrada";
     }
+  } catch (err) {
+    error.value = `Error cargando la solicitud: ${err.message}`;
   }
+};
+
+onMounted(async () => {
+  await fetchRequest();
+});
+
+const handleUpdateRequest = async () => {
+  try {
+    if (!name.value || !date.value) {
+      error.value = "Nombre y fecha son obligatorios";
+      return;
+    }
+    const updatedRequest = {
+      id: id.value,
+      rname: name.value,
+      date: new Date(date.value).toISOString(),
+      subject: subject.value,
+      description: description.value,
+    };
+    await requestStore.updateRequest(id.value, updatedRequest);
+    router.push('/requestlist');
+  } catch (err) {
+    error.value = `Error actualizando la solicitud: ${err.message}`;
+  }
+};
+
+const cancel = () => {
+  router.push('/requestlist');
 };
 </script>
 
 <template>
   <div class="edit-request create-request">
-    <form @submit.prevent="updateRequest">
+    <form @submit.prevent="handleUpdateRequest">
       <h1>Editar Solicitud</h1>
-      
+
       <div class="input-group">
         <label for="name">Nombre del solicitante:</label>
         <input type="text" v-model="name" id="name" required />
@@ -35,7 +73,7 @@ export default {
 
       <div class="input-group">
         <label for="date">Fecha de la solicitud:</label>
-        <input type="datetime-local" v-model="date" id="date" required />
+        <input type="date" v-model="date" id="date" required />
       </div>
 
       <div class="input-group">
@@ -52,13 +90,27 @@ export default {
         <button type="button" @click="cancel" class="cancel-btn">Cancelar</button>
         <button type="submit" class="save-btn">Guardar cambios</button>
       </div>
+
+      <p v-if="error" class="error-message">{{ error }}</p>
     </form>
   </div>
 </template>
 
 <style scoped>
-.create-request,
-.edit-request {
+/* ... mantén los estilos existentes ... */
+
+input:disabled,
+textarea:disabled {
+  background-color: rgba(10, 10, 35, 0.3);
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #ff4444;
+  margin-top: 10px;
+  text-align: center;
+}
+.create-request {
   display: flex;
   flex-direction: column;
   align-items: center;

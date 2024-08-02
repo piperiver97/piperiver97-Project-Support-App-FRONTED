@@ -9,10 +9,11 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/requestedit',
-    name: 'requestedit',
+    path: '/requestedit/:id',
+    name: 'RequestEdit',
     component: () => import('../views/RequestEditView.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
+    props: true
   },
   {
     path: '/requestlist',
@@ -26,7 +27,6 @@ const routes = [
     component: () => import('../views/SupportFormView.vue'),
     meta: { requiresAuth: true }
   },
-  
 ];
 
 const router = createRouter({

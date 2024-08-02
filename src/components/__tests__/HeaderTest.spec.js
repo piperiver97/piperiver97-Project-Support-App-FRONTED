@@ -1,9 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import Header from '@/components/Header.vue'; // Ajusta la ruta si es necesario
-import auth from '@/stores/auth'; // Ajusta la ruta si es necesario
+import Header from '@/components/Header.vue'; 
+import auth from '@/stores/auth'; 
 
-// Mock del módulo auth
 vi.mock('@/stores/auth', () => ({
   default: {
     isAuthenticated: false, 

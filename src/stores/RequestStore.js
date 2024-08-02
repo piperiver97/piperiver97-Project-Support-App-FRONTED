@@ -62,11 +62,9 @@ export const useRequestStore = defineStore({
       this.isLoading = true;
       this.error = null;
       try {
-        console.log('Sending request:', newRequest);
         const { data } = await api.post("", newRequest);
         this.requests.push(data);
       } catch (error) {
-        console.error('Error response:', error.response ? error.response : error);
         this.error = error.message;
       } finally {
         this.isLoading = false;
